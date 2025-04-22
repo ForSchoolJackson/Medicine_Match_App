@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../componants/theme.dart';
+import '../theme.dart';
 
 Widget PauseOverlay(context, game) {
   return Center(
