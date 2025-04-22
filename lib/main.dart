@@ -6,9 +6,9 @@ import 'package:flame/game.dart';
 
 //lib imports
 import 'game.dart';
-import 'overlays/startOverlay.dart';
-import 'overlays/pauseOverlay.dart';
-import 'overlays/gameOverlay.dart';
+import 'overlays/overlay_start.dart';
+import 'overlays/overlay_pause.dart';
+import 'overlays/overlay_game.dart';
 
 ///
 /// Project 3: Medicine Match
@@ -72,8 +72,8 @@ class MainApp extends StatelessWidget {
             game: MedicineMatchGame(context)..paused = true,
             overlayBuilderMap: {
               'start': (_, game) => StartOverlay(game: game),
-              'game': (_, game) => GameOverlay(context, game),
-              'pause': (_, game) => PauseOverlay(context, game),
+              'game': (_, game) => gameOverlay(context, game),
+              'pause': (_, game) => pauseOverlay(context, game),
             },
             initialActiveOverlays: const ['start'],
           ),

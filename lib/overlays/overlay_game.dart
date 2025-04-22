@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
-Widget GameOverlay(context, game) {
+Widget gameOverlay(context, game) {
   return Align(
     alignment: Alignment.topCenter,
     child: Container(

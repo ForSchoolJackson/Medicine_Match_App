@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../theme.dart';
 
-Widget PauseOverlay(context, game) {
+Widget pauseOverlay(context, game) {
   return Center(
     child: Container(
       width: 300,

@@ -40,7 +40,7 @@ class CardComponent extends SpriteComponent with TapCallbacks {
   void flipToBack() {
     isFlipped = false;
     sprite = backSprite;
-    print('Flipping to BACK manually');
+    //print('Flipping to BACK manually');
   }
 
 //for matching
@@ -48,7 +48,7 @@ class CardComponent extends SpriteComponent with TapCallbacks {
     if (isMatched) return;
     isFlipped = !isFlipped;
     sprite = isFlipped ? frontSprite : backSprite;
-    print('Card flipped to ${isFlipped ? "FRONT" : "BACK"}');
+    //print('Card flipped to ${isFlipped ? "FRONT" : "BACK"}');
   }
 
   @override
