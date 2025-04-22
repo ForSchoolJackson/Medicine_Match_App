@@ -1,0 +1,2 @@
+C:/340/heim_jackson_project3/android/app/.cxx/Debug/13h5lj6p/x86/CMakeFiles/edit_cache.dir
+C:/340/heim_jackson_project3/android/app/.cxx/Debug/13h5lj6p/x86/CMakeFiles/rebuild_cache.dir
