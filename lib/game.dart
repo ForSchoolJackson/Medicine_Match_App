@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 
 //flame imports
 import 'package:flame/game.dart';
-import 'package:flame/events.dart';
 
 //lib imports
 import 'componants/card.dart';
