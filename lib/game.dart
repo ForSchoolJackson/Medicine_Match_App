@@ -140,13 +140,15 @@ class MedicineMatchGame extends FlameGame {
         //add score
         gameProvider.addScore(10);
       } else {
-        first.flip();
-        second.flip();
-
         //play wrong sound
         gameProvider.playSfx("audio/wrong.wav");
         //lose score
         gameProvider.addScore(-5);
+
+        await Future.delayed(const Duration(seconds: 1));
+        first.flip();
+        second.flip();
+
       }
 
       flippedCards.clear();
