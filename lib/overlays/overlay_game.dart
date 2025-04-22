@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+
+import '../providers/provider_game.dart';
 import '../theme.dart';
 
 Widget gameOverlay(context, game) {
+  final gameProvider = Provider.of<GameProvider>(context, listen: true);
+
   return Align(
     alignment: Alignment.topCenter,
     child: Container(
@@ -12,9 +17,9 @@ Widget gameOverlay(context, game) {
       margin: const EdgeInsets.all(20),
       child: Row(
         children: [
-          const Expanded(
+          Expanded(
             child: Text(
-              "Medicine Match",
+              "Score: ${gameProvider.score}",
               style: GameTextStyles.bar,
             ),
           ),

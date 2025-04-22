@@ -1,15 +1,20 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //flame imports
 import 'package:flame/game.dart';
+import 'package:flame/events.dart';
 
 //lib imports
 import 'componants/card.dart';
+import 'providers/provider_game.dart';
 
 class MedicineMatchGame extends FlameGame {
   final BuildContext context;
+  late final gameProvider;
+
   MedicineMatchGame(this.context);
 
   @override
@@ -20,10 +25,15 @@ class MedicineMatchGame extends FlameGame {
     'sunflower.png',
   ];
 
+  bool canFlip = true;
+
   final List<CardComponent> cards = [];
   final List<CardComponent> flippedCards = [];
 
   Future<void> startGame() async {
+    gameProvider = Provider.of<GameProvider>(context, listen: false);
+    //gameProvider.playBgm("audio/retro_bgm.wav");
+
     //screen size
     final screenWidth = size.x;
     final screenHeight = size.y;
@@ -83,6 +93,7 @@ class MedicineMatchGame extends FlameGame {
         position: Vector2(x, y),
         size: cardSize,
         onFlipped: handleCardFlip,
+        canFlipCallback: () => canFlip,
       );
 
       cards.add(card);
@@ -105,27 +116,45 @@ class MedicineMatchGame extends FlameGame {
   }
 
   void handleCardFlip(CardComponent card) async {
-    if (card.isFlipped &&
-        !flippedCards.contains(card) &&
-        flippedCards.length < 2) {
-      flippedCards.add(card);
+    if (!canFlip || flippedCards.contains(card) || !card.isFlipped) return;
 
-      if (flippedCards.length == 2) {
-        await Future.delayed(const Duration(milliseconds: 500));
+    //play flip sound
+    gameProvider.playSfx("audio/flip.ogg");
 
-        final first = flippedCards[0];
-        final second = flippedCards[1];
+    flippedCards.add(card);
 
-        if (first.frontImagePath == second.frontImagePath) {
-          first.isMatched = true;
-          second.isMatched = true;
-        } else {
-          first.flip();
-          second.flip();
-        }
+    if (flippedCards.length == 2) {
+      canFlip = false;
 
-        flippedCards.clear();
+      await Future.delayed(const Duration(milliseconds: 500));
+
+      final first = flippedCards[0];
+      final second = flippedCards[1];
+
+      if (first.frontImagePath == second.frontImagePath) {
+        first.isMatched = true;
+        second.isMatched = true;
+
+        //play correct
+        gameProvider.playSfx("audio/correct.wav");
+
+        //add score
+        gameProvider.addScore(10);
+      } else {
+        first.flip();
+        second.flip();
+
+        //play wrong sound
+        gameProvider.playSfx("audio/wrong.wav");
+        //lose score
+        gameProvider.addScore(-5);
       }
+
+      flippedCards.clear();
+
+      // ✅ small lockout before next flip
+      await Future.delayed(const Duration(milliseconds: 300));
+      canFlip = true;
     }
   }
 }

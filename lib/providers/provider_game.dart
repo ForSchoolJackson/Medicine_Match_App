@@ -64,7 +64,7 @@ class GameProvider extends ChangeNotifier {
   // add score
   void addScore(int value) {
     _score += value;
-    notifyListeners();
+    //notifyListeners();
   }
 
   // dispose audio

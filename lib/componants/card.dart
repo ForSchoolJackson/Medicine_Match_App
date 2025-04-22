@@ -6,6 +6,8 @@ class CardComponent extends SpriteComponent with TapCallbacks {
   final String backImagePath;
   final void Function(CardComponent) onFlipped;
 
+  final bool Function() canFlipCallback;
+
   bool isFlipped = false;
   bool isMatched = false;
 
@@ -16,6 +18,7 @@ class CardComponent extends SpriteComponent with TapCallbacks {
     required this.frontImagePath,
     required this.backImagePath,
     required this.onFlipped,
+    required this.canFlipCallback,
     Vector2? position,
     Vector2? size,
   }) : super(position: position, size: size);
@@ -25,7 +28,7 @@ class CardComponent extends SpriteComponent with TapCallbacks {
     frontSprite = await Sprite.load(frontImagePath);
     backSprite = await Sprite.load(backImagePath);
 
-    // ✅ Show front sprite right away
+    //show front sprite first
     isFlipped = true;
     sprite = frontSprite;
   }
@@ -33,7 +36,7 @@ class CardComponent extends SpriteComponent with TapCallbacks {
 //front
   void showFront() {
     sprite = frontSprite;
-    isFlipped = true; 
+    isFlipped = true;
   }
 
 //back
@@ -53,7 +56,7 @@ class CardComponent extends SpriteComponent with TapCallbacks {
 
   @override
   void onTapDown(TapDownEvent event) {
-    if (!isFlipped && !isMatched) {
+    if (!isFlipped && !isMatched && canFlipCallback()) {
       flip();
       onFlipped(this);
     }

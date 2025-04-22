@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 //flame imports
 import 'package:flame/flame.dart';
@@ -9,6 +10,8 @@ import 'game.dart';
 import 'overlays/overlay_start.dart';
 import 'overlays/overlay_pause.dart';
 import 'overlays/overlay_game.dart';
+import 'providers/provider_game.dart';
+
 
 ///
 /// Project 3: Medicine Match
@@ -45,7 +48,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.fullScreen();
 
-  runApp(const MainApp());
+ // runApp(const MainApp());
+   runApp(
+    ChangeNotifierProvider(
+      create: (_) => GameProvider(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -53,6 +62,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final game = MedicineMatchGame(context); 
+    Provider.of<GameProvider>(context, listen: false).game = game;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(

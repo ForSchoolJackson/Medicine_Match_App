@@ -51,11 +51,11 @@ class StartOverlay extends StatelessWidget {
 
               // Start Game Button
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async {
                   game.paused = false;
                   game.overlays.remove('start');
                   game.overlays.add('game');
-                  game.startGame(); //start game
+                  await game.startGame(); //start game
                 },
                 child: const Text("Start Game"),
               ),
