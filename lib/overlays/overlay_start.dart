@@ -55,12 +55,13 @@ class StartOverlay extends StatelessWidget {
                   game.paused = false;
                   game.overlays.remove('start');
                   game.overlays.add('game');
-                  await game.startGame(); //start game
+                  await game.startGame();
                 },
                 child: const Text("Start Game"),
               ),
               // You can add a Settings button if needed
               // ElevatedButton(
+              //  style: GameTextStyles.buttonStyle,
               //   onPressed: () {
               //     game.overlays.add("settings");
               //   },

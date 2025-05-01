@@ -12,7 +12,7 @@ import 'providers/provider_game.dart';
 
 class MedicineMatchGame extends FlameGame {
   final BuildContext context;
-  late final gameProvider;
+  late GameProvider gameProvider;
 
   MedicineMatchGame(this.context);
 
@@ -139,6 +139,13 @@ class MedicineMatchGame extends FlameGame {
 
         //add score
         gameProvider.addScore(10);
+
+        //check end of game
+        if (cards.every((card) => card.isMatched)) {
+          await Future.delayed(const Duration(milliseconds: 500));
+          overlays.add("endgame");
+          pauseEngine();
+        }
       } else {
         //play wrong sound
         gameProvider.playSfx("audio/wrong.wav");
@@ -148,7 +155,6 @@ class MedicineMatchGame extends FlameGame {
         await Future.delayed(const Duration(seconds: 1));
         first.flip();
         second.flip();
-
       }
 
       flippedCards.clear();

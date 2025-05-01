@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+//all app styles for text here
 class GameTextStyles {
   static const TextStyle title = TextStyle(
     color: Colors.white,
@@ -12,14 +13,10 @@ class GameTextStyles {
     fontSize: 20,
   );
 
-  static const TextStyle button = TextStyle(
-    color: Colors.white,
-    fontSize: 22,
-  );
-
   static const TextStyle bar = TextStyle(
     color: Colors.white,
     fontSize: 30,
     fontWeight: FontWeight.w600,
   );
+
 }

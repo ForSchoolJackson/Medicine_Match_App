@@ -3,28 +3,25 @@ import 'package:provider/provider.dart';
 
 //flame imports
 import 'package:flame/flame.dart';
-import 'package:flame/game.dart';
 
 //lib imports
-import 'game.dart';
-import 'overlays/overlay_start.dart';
-import 'overlays/overlay_pause.dart';
-import 'overlays/overlay_game.dart';
 import 'providers/provider_game.dart';
-
+import 'tabs/game_tab.dart';
+import 'tabs/highscore_tab.dart';
+import 'tabs/settings_tab.dart';
+import 'tabs/help_tab.dart';
 
 ///
 /// Project 3: Medicine Match
 ///
-/// The last flutter project.
+/// The last flutter project. I made a card matching game uing the
+/// flame engine in flutter. Users will match cards to gain points to
+/// get a high score.
 ///
 /// @author: Jackson Heim
 /// @version: 1.0.0
 /// @since: 2025-04-20
 ///
-/// issues:
-/// -the cards WILL NOT start on the front side
-/// for the player to memorize.
 ///
 /// -need to draw wayyyy more cards
 ///
@@ -48,8 +45,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Flame.device.fullScreen();
 
- // runApp(const MainApp());
-   runApp(
+  // runApp(const MainApp());
+  runApp(
     ChangeNotifierProvider(
       create: (_) => GameProvider(),
       child: const MainApp(),
@@ -57,38 +54,63 @@ void main() async {
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  int currentIndex = 0;
+
+  final tabs = const [
+    GameTab(),
+    HighscoreTab(),
+    SettingsTab(),
+    HelpTab(),
+  ];
+
+  @override
   Widget build(BuildContext context) {
-    final game = MedicineMatchGame(context); 
-    Provider.of<GameProvider>(context, listen: false).game = game;
+    late GameProvider gameProvider = Provider.of<GameProvider>(context, listen: false);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                Color(0xFF1E1E2C),
-                Color(0xFF2E2B5F),
-                Color(0xFF6A62C2),
-              ],
-            ),
-          ),
-          child: GameWidget(
-            game: MedicineMatchGame(context)..paused = true,
-            overlayBuilderMap: {
-              'start': (_, game) => StartOverlay(game: game),
-              'game': (_, game) => gameOverlay(context, game),
-              'pause': (_, game) => pauseOverlay(context, game),
-            },
-            initialActiveOverlays: const ['start'],
-          ),
+        //body: tabs[currentIndex],
+        body: IndexedStack(
+          index: currentIndex,
+          children: tabs,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: currentIndex,
+          onTap: (index) {
+            final game = gameProvider.game;
+
+            setState(() {
+              //Pause if not game tab
+              if (currentIndex == 0 &&
+                  index != 0 &&
+                  game != null &&
+                  !game.paused) {
+                game.paused = true;
+                game.overlays.add('pause');
+              }
+              currentIndex = index;
+            });
+          },
+          type: BottomNavigationBarType.fixed,
+          items: const [
+            BottomNavigationBarItem(
+                icon: Icon(Icons.videogame_asset), label: 'Game'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.star), label: 'High Scores'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.settings), label: 'Settings'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.help_outline), label: 'Help'),
+          ],
         ),
       ),
     );

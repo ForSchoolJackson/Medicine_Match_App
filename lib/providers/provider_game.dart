@@ -11,14 +11,14 @@ class GameProvider extends ChangeNotifier {
   int _lastScore = 0;
   bool inGame = false;
 
-  // get
+  //getter
   FlameGame? get game => _theGame;
   double get musicVolume => _musicVolume;
   double get sfxVolume => _sfxVolume;
   int get score => _score;
   int get lastScore => _lastScore;
 
-  // set
+  //setter
   set game(FlameGame? value) {
     _theGame = value;
   }
@@ -64,7 +64,14 @@ class GameProvider extends ChangeNotifier {
   // add score
   void addScore(int value) {
     _score += value;
-    //notifyListeners();
+    print("Updated Score: $_score");
+    notifyListeners();
+  }
+
+  //reset score
+  void resetScore() {
+    _score = 0;
+    notifyListeners();
   }
 
   // dispose audio

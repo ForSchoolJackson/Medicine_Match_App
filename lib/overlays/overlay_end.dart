@@ -1,10 +1,27 @@
+//Score: ${gameProvider.score}
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/provider_game.dart';
 import '../theme.dart';
 
-Widget pauseOverlay(context, game) {
+Widget endGameOverlay(BuildContext context, dynamic game) {
+  final gameProvider = Provider.of<GameProvider>(context, listen: false);
+  final int finalScore = gameProvider.score;
+
+  //massage based on score
+  String endMessage;
+  if (finalScore >= 100) {
+    endMessage = "You caught them all!";
+  } else if (finalScore >= 50) {
+    endMessage = "All ingredients have been collected.";
+  } else if (finalScore >= 0) {
+    endMessage = "Took you a while.";
+  } else {
+    endMessage = "You have a TERRIBLE memory.";
+  }
+
   return Center(
     child: Container(
       width: 300,
@@ -16,45 +33,36 @@ Widget pauseOverlay(context, game) {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            "Paused",
+          Text(
+            endMessage,
             style: GameTextStyles.title,
+            textAlign: TextAlign.center,
           ),
-          const SizedBox(
-            height: 20,
+          const SizedBox(height: 16),
+          Text(
+            "Score: ${gameProvider.score}",
+            style: GameTextStyles.bar,
           ),
+          const SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {
-              game.paused = false;
-              game.overlays.remove("pause");
-            },
-            child: const Text("Resume"),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              //game provider
-              late GameProvider gameProvider =
+              final gameProvider =
                   Provider.of<GameProvider>(context, listen: false);
 
-              //remove overlays
               game.pauseEngine();
-              game.overlays.remove("pause");
+              game.overlays.remove("endgame");
               game.overlays.remove("game");
               game.overlays.add("start");
 
-              //remove all game componants
               game.removeAll(game.children.toList());
-
-              //clear game
-              game.flippedCards.clear();
               game.cards.clear();
+              game.flippedCards.clear();
               game.canFlip = true;
 
-              //null game
               gameProvider.resetScore();
               gameProvider.game = null;
             },
-            child: const Text("Quit"),
+            child: const Text("Restart"),
           ),
         ],
       ),
