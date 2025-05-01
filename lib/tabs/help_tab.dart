@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
+//lib
 import '../theme.dart';
 
+//tab for help screen
 class HelpTab extends StatelessWidget {
   const HelpTab({super.key});
 
   @override
   Widget build(BuildContext context) {
+    //style
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -27,22 +30,25 @@ class HelpTab extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                //title
                 const Text(
                   'Help',
                   style: GameTextStyles.title,
                 ),
                 const SizedBox(height: 20),
+                //body
                 const Text(
                   'Here you can find information and help about the game.',
                   style: GameTextStyles.body,
                 ),
                 const SizedBox(height: 20),
 
-                // Make the text content scrollable only
+                //scrollable if needed
                 const Expanded(
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
+                        //help text
                         Text(
                           'How to play?',
                           style: GameTextStyles.body2,
@@ -67,10 +73,8 @@ class HelpTab extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 40),
-
-                // Center the button
+                //documentation button
                 Center(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -82,6 +86,7 @@ class HelpTab extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
+                    //button
                     onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -100,9 +105,11 @@ class HelpTab extends StatelessWidget {
   }
 }
 
+//tab for documentation info
 class DocumentationTab extends StatelessWidget {
   const DocumentationTab({super.key});
 
+  //style
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,6 +120,7 @@ class DocumentationTab extends StatelessWidget {
           'Documentation',
           style: GameTextStyles.bar,
         ),
+        //back arrow
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -123,11 +131,12 @@ class DocumentationTab extends StatelessWidget {
           width: MediaQuery.of(context).size.width * 0.9,
           padding: const EdgeInsets.all(20),
           child: const SingleChildScrollView(
+            //documentation
             child: Text(
               '''
-Medicine Match!
+              Medicine Match!
 
-Built with Flutter + Flame.
+              Built with Flutter + Flame.
               ''',
               style: TextStyle(fontSize: 16, color: Colors.white),
             ),

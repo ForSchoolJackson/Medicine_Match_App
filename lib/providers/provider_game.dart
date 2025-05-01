@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+//game provider
 class GameProvider extends ChangeNotifier {
   FlameGame? _theGame;
   double _musicVolume = 1.0;
@@ -18,7 +19,7 @@ class GameProvider extends ChangeNotifier {
   double get sfxVolume => _sfxVolume;
   int get score => _score;
   int get lastScore => _lastScore;
-  List<int> get topHighScores => highScores;  // Expose high scores
+  List<int> get topHighScores => highScores; // Expose high scores
 
   //setter
   set game(FlameGame? value) {
@@ -29,6 +30,10 @@ class GameProvider extends ChangeNotifier {
   set musicVolume(double value) {
     _musicVolume = value;
     musicPlayer.setVolume(_musicVolume);
+    //save setting
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.setDouble('musicVolume', _musicVolume);
+    });
     notifyListeners();
   }
 
@@ -36,22 +41,33 @@ class GameProvider extends ChangeNotifier {
   set sfxVolume(double value) {
     _sfxVolume = value;
     sfxPlayer.setVolume(_sfxVolume);
+     //save setting
+    SharedPreferences.getInstance().then((prefs) {
+    prefs.setDouble('sfxVolume', _sfxVolume);
+  });
     notifyListeners();
   }
 
-  //score
-  set lastScore(int value) {
-    _lastScore = value;
+  //load volume pref
+  Future<void> loadVolumes() async {
+    final prefs = await SharedPreferences.getInstance();
+    _musicVolume = prefs.getDouble('musicVolume') ?? 1.0;
+    _sfxVolume = prefs.getDouble('sfxVolume') ?? 1.0;
+
+    // apply loaded volumes
+    musicPlayer.setVolume(_musicVolume);
+    sfxPlayer.setVolume(_sfxVolume);
+
     notifyListeners();
   }
 
-  // audio players
+  //audio players
   AudioPlayer musicPlayer = AudioPlayer();
   AudioPlayer sfxPlayer = AudioPlayer();
   final audioContext =
       AudioContextConfig(focus: AudioContextConfigFocus.mixWithOthers).build();
 
-  // play bgm
+  //play bgm
   void playBgm(String url) async {
     musicPlayer.setAudioContext(audioContext); // allow mixing sounds
     musicPlayer.setReleaseMode(ReleaseMode.loop);
@@ -61,6 +77,12 @@ class GameProvider extends ChangeNotifier {
   //play sfx
   void playSfx(String url) async {
     await sfxPlayer.play(AssetSource(url));
+  }
+
+  //score
+  set lastScore(int value) {
+    _lastScore = value;
+    notifyListeners();
   }
 
   //add score
@@ -76,7 +98,7 @@ class GameProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Load high scores from SharedPreferences
+  //load scores
   Future<void> loadHighScores() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? savedScores = prefs.getStringList('highScores');
@@ -85,35 +107,41 @@ class GameProvider extends ChangeNotifier {
     } else {
       highScores = [];
     }
-    highScores.sort((a, b) => b.compareTo(a));  // Sort high scores in descending order
+    //sort scores
+    highScores.sort((a, b) => b.compareTo(a));
     notifyListeners();
   }
 
-  // Save high scores to SharedPreferences
+  //save scores
   Future<void> saveHighScores() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
+    //shared preferences
     prefs.setStringList(
         'highScores', highScores.map((score) => score.toString()).toList());
   }
 
-  // Add a new score and update high scores
+  //add new score
   void addHighScore(int newScore) {
     highScores.add(newScore);
-    highScores.sort((a, b) => b.compareTo(a));  // Sort in descending order
-    if (highScores.length > 10) {  // Keep only top 10 scores
+    //sort
+    highScores.sort((a, b) => b.compareTo(a));
+    //keep ten
+    if (highScores.length > 10) {
       highScores = highScores.sublist(0, 10);
     }
-    saveHighScores();  // Save the updated list to SharedPreferences
+    //save
+    saveHighScores();
     notifyListeners();
   }
 
-  // Refresh the high scores from SharedPreferences
+  //refresh score
   Future<void> refreshHighScores() async {
     await loadHighScores();
     notifyListeners();
   }
 
-  // dispose audio
+  //disposeaudio player
+  @override
   void dispose() {
     musicPlayer.dispose();
     sfxPlayer.dispose();

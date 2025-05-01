@@ -3,23 +3,24 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-//flame imports
 import 'package:flame/game.dart';
 
 //lib imports
 import 'componants/card.dart';
 import 'providers/provider_game.dart';
 
+//the game
 class MedicineMatchGame extends FlameGame {
   final BuildContext context;
   late GameProvider gameProvider;
 
   MedicineMatchGame(this.context);
 
+  //clear
   @override
   Color backgroundColor() => const Color(0x00000000);
 
+  //card images
   final List<String> cardImages = [
     'toadstool.png',
     'sunflower.png',
@@ -27,12 +28,13 @@ class MedicineMatchGame extends FlameGame {
 
   bool canFlip = true;
 
+  //lists
   final List<CardComponent> cards = [];
   final List<CardComponent> flippedCards = [];
 
+  //start
   Future<void> startGame() async {
     gameProvider = Provider.of<GameProvider>(context, listen: false);
-    //gameProvider.playBgm("audio/retro_bgm.wav");
 
     //screen size
     final screenWidth = size.x;
@@ -41,7 +43,7 @@ class MedicineMatchGame extends FlameGame {
     final cardSize = Vector2(110, 110);
     const spacing = 10.0;
 
-    // Add some padding
+    //padding
     const horizontalPadding = 20.0;
     const verticalPadding = 20.0;
 
@@ -53,7 +55,7 @@ class MedicineMatchGame extends FlameGame {
         ((screenHeight - 2 * verticalPadding) ~/ (cardSize.y + spacing))
             .toInt();
 
-    //make sure there are always pairs
+    //always pairs
     final totalCardsThatFit = cardsPerRow * cardsPerColumn;
     final numberOfPairs = (totalCardsThatFit ~/ 2);
     final totalCards = numberOfPairs * 2;
@@ -79,14 +81,15 @@ class MedicineMatchGame extends FlameGame {
 
     allCardImages.shuffle();
 
-    // Load all the cards
+    //load
     for (int i = 0; i < allCardImages.length; i++) {
-      final row = i ~/ cardsPerRow; //row number
-      final col = i % cardsPerRow; //column number
+      final row = i ~/ cardsPerRow; //row
+      final col = i % cardsPerRow; //column
 
       final x = startX + col * (cardSize.x + spacing);
       final y = startY + row * (cardSize.y + spacing);
 
+      //componant
       final card = CardComponent(
         frontImagePath: allCardImages[i],
         backImagePath: 'back.png',
@@ -96,6 +99,7 @@ class MedicineMatchGame extends FlameGame {
         canFlipCallback: () => canFlip,
       );
 
+      //add cards
       cards.add(card);
       add(card);
 
@@ -104,33 +108,20 @@ class MedicineMatchGame extends FlameGame {
 
     await Future.delayed(const Duration(milliseconds: 10));
 
+    //show front first
     for (var card in cards) {
       card.showFront();
     }
 
     await Future.delayed(const Duration(seconds: 5));
 
+    //than back
     for (var card in cards) {
       card.flipToBack();
     }
   }
 
-  Future<void> saveScore(int score) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> scores = prefs.getStringList('highScores') ?? [];
-
-    //print("Saving score: $score");
-
-    scores.add(score.toString());
-
-    // Keep top 10 scores
-    List<int> sorted = scores.map(int.parse).toList()
-      ..sort((b, a) => a.compareTo(b));
-    if (sorted.length > 10) sorted = sorted.sublist(0, 10);
-
-    prefs.setStringList('highScores', sorted.map((e) => e.toString()).toList());
-  }
-
+  //card flip
   void handleCardFlip(CardComponent card) async {
     if (!canFlip || flippedCards.contains(card) || !card.isFlipped) return;
 
@@ -138,15 +129,18 @@ class MedicineMatchGame extends FlameGame {
     gameProvider.playSfx("audio/flip.ogg");
 
     flippedCards.add(card);
-
+    
+    //flip two
     if (flippedCards.length == 2) {
       canFlip = false;
 
+      //delay after two flipped
       await Future.delayed(const Duration(milliseconds: 500));
-
+      
       final first = flippedCards[0];
       final second = flippedCards[1];
-
+      
+      //check correct
       if (first.frontImagePath == second.frontImagePath) {
         first.isMatched = true;
         second.isMatched = true;
@@ -161,7 +155,7 @@ class MedicineMatchGame extends FlameGame {
         if (cards.every((card) => card.isMatched)) {
           await Future.delayed(const Duration(milliseconds: 500));
           //add to high scores
-         gameProvider.addHighScore(gameProvider.score);
+          gameProvider.addHighScore(gameProvider.score);
           
           overlays.add("endgame");
           pauseEngine();
@@ -184,4 +178,19 @@ class MedicineMatchGame extends FlameGame {
       canFlip = true;
     }
   }
+
+
+//  Future<void> saveScore(int score) async {
+//     SharedPreferences prefs = await SharedPreferences.getInstance();
+//     List<String> scores = prefs.getStringList('highScores') ?? [];
+
+//     scores.add(score.toString());
+
+//     //keep ten scores
+//     List<int> sorted = scores.map(int.parse).toList()
+//       ..sort((b, a) => a.compareTo(b));
+//     if (sorted.length > 10) sorted = sorted.sublist(0, 10);
+
+//     prefs.setStringList('highScores', sorted.map((e) => e.toString()).toList());
+//   }
 }

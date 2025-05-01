@@ -1,26 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+//lib
 import '../providers/provider_game.dart';
 import '../theme.dart';
 
+//tab for score screen (stateful)
 class HighscoreTab extends StatefulWidget {
   const HighscoreTab({super.key});
 
   @override
-  HighscoreTabState createState() => HighscoreTabState();
+  _HighscoreTabState createState() => _HighscoreTabState();
 }
 
-class HighscoreTabState extends State<HighscoreTab> {
+//state
+class _HighscoreTabState extends State<HighscoreTab> {
   List<int> highScores = [];
 
+  //initail
   @override
   void initState() {
     super.initState();
     loadHighScores();
   }
 
-  // Load high scores from SharedPreferences
+  //load from shared preferences
   Future<void> loadHighScores() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? savedScores = prefs.getStringList('highScores');
@@ -29,14 +34,17 @@ class HighscoreTabState extends State<HighscoreTab> {
     });
   }
 
+  //refresh
   void refreshScores() {
     loadHighScores();
   }
 
+  //build
   @override
   Widget build(BuildContext context) {
     final gameProvider = Provider.of<GameProvider>(context);
 
+    //style
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -57,6 +65,7 @@ class HighscoreTabState extends State<HighscoreTab> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                //title
                 const Text(
                   'High Scores',
                   style: GameTextStyles.title,
@@ -68,7 +77,7 @@ class HighscoreTabState extends State<HighscoreTab> {
                 ),
                 const SizedBox(height: 10),
 
-                // Display the high scores in a scrollable list
+                //list of scores
                 Expanded(
                   child: ListView.builder(
                     itemCount: gameProvider.topHighScores.length,
@@ -84,8 +93,7 @@ class HighscoreTabState extends State<HighscoreTab> {
                         ),
                         child: Text(
                           '$score',
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 18),
+                          style: GameTextStyles.body,
                         ),
                       );
                     },

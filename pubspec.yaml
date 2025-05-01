@@ -27,3 +27,8 @@ flutter:
   assets:    
     - assets/images/
     - assets/audio/
+
+  fonts:
+    - family: MyFont
+      fonts:
+        - asset: assets/fonts/myFont.ttf

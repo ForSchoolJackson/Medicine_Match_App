@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+//lib
 import '../providers/provider_game.dart';
 import '../theme.dart';
 
+//overlay for pause screen
 Widget pauseOverlay(context, game) {
+
+  //style
   return Center(
     child: Container(
       width: 300,
@@ -23,6 +27,7 @@ Widget pauseOverlay(context, game) {
           const SizedBox(
             height: 20,
           ),
+          //resume
           ElevatedButton(
             onPressed: () {
               game.paused = false;
@@ -30,6 +35,7 @@ Widget pauseOverlay(context, game) {
             },
             child: const Text("Resume"),
           ),
+          //quit
           ElevatedButton(
             onPressed: () {
               //game provider
@@ -50,7 +56,7 @@ Widget pauseOverlay(context, game) {
               game.cards.clear();
               game.canFlip = true;
 
-              //null game
+              //provider reset
               gameProvider.resetScore();
               gameProvider.game = null;
             },

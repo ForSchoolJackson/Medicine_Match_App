@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+//lib
 import '../providers/provider_game.dart';
 import '../theme.dart';
 
+//overlay for end screen
 Widget endGameOverlay(BuildContext context, dynamic game) {
   final gameProvider = Provider.of<GameProvider>(context, listen: false);
   final int finalScore = gameProvider.score;
@@ -23,6 +25,7 @@ Widget endGameOverlay(BuildContext context, dynamic game) {
   final screenWidth = MediaQuery.of(context).size.width;
   final screenHeight = MediaQuery.of(context).size.height;
 
+  //style
   return Center(
     child: SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
@@ -40,18 +43,21 @@ Widget endGameOverlay(BuildContext context, dynamic game) {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            //message
             Text(
               endMessage,
               style: GameTextStyles.title,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 16),
+            //score
             Text(
               "Score: ${gameProvider.score}",
               style: GameTextStyles.bar,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
+            //button
             ElevatedButton(
               onPressed: () {
                 final gameProvider =

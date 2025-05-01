@@ -1,9 +1,11 @@
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 
+//handles card componants
 class CardComponent extends SpriteComponent with TapCallbacks {
   final String frontImagePath;
   final String backImagePath;
+
   final void Function(CardComponent) onFlipped;
 
   final bool Function() canFlipCallback;
@@ -14,6 +16,7 @@ class CardComponent extends SpriteComponent with TapCallbacks {
   late Sprite frontSprite;
   late Sprite backSprite;
 
+  //constructor
   CardComponent({
     required this.frontImagePath,
     required this.backImagePath,
@@ -23,6 +26,7 @@ class CardComponent extends SpriteComponent with TapCallbacks {
     Vector2? size,
   }) : super(position: position, size: size);
 
+  //on load
   @override
   Future<void> onLoad() async {
     frontSprite = await Sprite.load(frontImagePath);
@@ -43,7 +47,6 @@ class CardComponent extends SpriteComponent with TapCallbacks {
   void flipToBack() {
     isFlipped = false;
     sprite = backSprite;
-    //print('Flipping to BACK manually');
   }
 
 //for matching
@@ -51,9 +54,9 @@ class CardComponent extends SpriteComponent with TapCallbacks {
     if (isMatched) return;
     isFlipped = !isFlipped;
     sprite = isFlipped ? frontSprite : backSprite;
-    //print('Card flipped to ${isFlipped ? "FRONT" : "BACK"}');
   }
 
+  //when tapped
   @override
   void onTapDown(TapDownEvent event) {
     if (!isFlipped && !isMatched && canFlipCallback()) {

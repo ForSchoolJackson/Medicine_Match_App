@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 
+//lib
 import '../theme.dart';
 
+//overlay for start screen
 class StartOverlay extends StatelessWidget {
   final dynamic game;
   const StartOverlay({super.key, required this.game});
 
+  //build
   @override
   Widget build(BuildContext context) {
-    // Get screen size to determine space available
+    //get screen size
     final screenHeight = MediaQuery.of(context).size.height;
-
+    
+    //style
     return Center(
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
@@ -21,20 +25,20 @@ class StartOverlay extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // Title Text
             const Text(
               "OH NO!",
               style: GameTextStyles.title,
               textAlign: TextAlign.center,
             ),
 
-            // Image with dynamic height based on screen size
+            //image
             Image.asset(
               'assets/images/toadyGuy.png',
-              height: screenHeight * 0.25, // Adjust image size based on screen height
+              //sized to screen
+              height: screenHeight * 0.25,
             ),
 
-            // Body Text
+            //body
             const SizedBox(height: 10),
             const Text(
               "\t There has been an incident in the lab! All of the ingredients have gained sentience and are escaping!",
@@ -49,7 +53,7 @@ class StartOverlay extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // Adjust button size based on available space
+            //start button
             ElevatedButton(
               onPressed: () async {
                 game.paused = false;

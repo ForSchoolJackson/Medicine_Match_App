@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+//lib
 import '../theme.dart';
 
+//overlay for top of game
 Widget gameOverlay(context, game) {
 
+  //style
   return Align(
     alignment: Alignment.topCenter,
     child: Container(
@@ -14,11 +17,13 @@ Widget gameOverlay(context, game) {
       child: Row(
         children: [
           const Expanded(
+            //title
             child: Text(
-              "Medicine Match",
+              "\t Medicine Match",
               style: GameTextStyles.bar,
             ),
           ),
+          //pause button
           IconButton(
             onPressed: () {
               game.paused = true;
