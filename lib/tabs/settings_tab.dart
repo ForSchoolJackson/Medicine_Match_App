@@ -18,8 +18,8 @@ class SettingsTab extends StatelessWidget {
         ),
         child: Center(
           child: Container(
-            margin: const EdgeInsets.all(16),
-            padding: const EdgeInsets.all(20),
+            margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+            padding: const EdgeInsets.all(30),
             decoration: BoxDecoration(
               color: const Color.fromARGB(255, 21, 3, 49),
               borderRadius: BorderRadius.circular(20),

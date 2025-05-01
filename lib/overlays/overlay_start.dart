@@ -8,67 +8,58 @@ class StartOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Get screen size to determine space available
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Center(
       child: Container(
-        width: 350,
-        height: 710,
+        margin: const EdgeInsets.symmetric(horizontal: 30, vertical: 30),
+        padding: const EdgeInsets.all(30),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 21, 3, 49),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "OH NO!",
-                style: GameTextStyles.title,
-                textAlign: TextAlign.center,
-              ),
+        child: Column(
+          children: [
+            // Title Text
+            const Text(
+              "OH NO!",
+              style: GameTextStyles.title,
+              textAlign: TextAlign.center,
+            ),
 
-              //image
-              Image.asset(
-                'assets/images/toadyGuy.png',
-                height: 200,
-              ),
+            // Image with dynamic height based on screen size
+            Image.asset(
+              'assets/images/toadyGuy.png',
+              height: screenHeight * 0.25, // Adjust image size based on screen height
+            ),
 
-              //body text
-              const Text(
-                "There has been an incident in the lab! All of the ingredients have gained sentience and are escaping!",
-                style: GameTextStyles.body,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
+            // Body Text
+            const SizedBox(height: 10),
+            const Text(
+              "\t There has been an incident in the lab! All of the ingredients have gained sentience and are escaping!",
+              style: GameTextStyles.body,
+              textAlign: TextAlign.left,
+            ),
+            const SizedBox(height: 10),
+            const Text(
+              "\t You have a few seconds to memorize the cards before they flip over. After that, you need to match the pairs by tapping on two at a time. Hurry up and catch them!",
+              style: GameTextStyles.body,
+              textAlign: TextAlign.left,
+            ),
+            const SizedBox(height: 30),
 
-              //body text
-              const Text(
-                "You have a few seconds to memorize the cards before they flip over. After that, you need to match the pairs by tapping on two at a time. Hurry up and catch them! ",
-                style: GameTextStyles.body,
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 30),
-
-              // Start Game Button
-              ElevatedButton(
-                onPressed: () async {
-                  game.paused = false;
-                  game.overlays.remove('start');
-                  game.overlays.add('game');
-                  await game.startGame();
-                },
-                child: const Text("Start Game"),
-              ),
-              // You can add a Settings button if needed
-              // ElevatedButton(
-              //  style: GameTextStyles.buttonStyle,
-              //   onPressed: () {
-              //     game.overlays.add("settings");
-              //   },
-              //   child: const Text("Settings"),
-              // ),
-            ],
-          ),
+            // Adjust button size based on available space
+            ElevatedButton(
+              onPressed: () async {
+                game.paused = false;
+                game.overlays.remove('start');
+                game.overlays.add('game');
+                await game.startGame();
+              },
+              child: const Text("Start Game"),
+            ),
+          ],
         ),
       ),
     );

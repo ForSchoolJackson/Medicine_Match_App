@@ -10,7 +10,12 @@ class GameTextStyles {
 
   static const TextStyle body = TextStyle(
     color: Colors.white,
-    fontSize: 20,
+  );
+
+static const TextStyle body2 = TextStyle(
+    color: Colors.white,
+    fontSize: 30,
+    fontWeight: FontWeight.bold,
   );
 
   static const TextStyle bar = TextStyle(

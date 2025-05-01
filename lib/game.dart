@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //flame imports
 import 'package:flame/game.dart';
@@ -114,6 +115,22 @@ class MedicineMatchGame extends FlameGame {
     }
   }
 
+  Future<void> saveScore(int score) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> scores = prefs.getStringList('highScores') ?? [];
+
+    //print("Saving score: $score");
+
+    scores.add(score.toString());
+
+    // Keep top 10 scores
+    List<int> sorted = scores.map(int.parse).toList()
+      ..sort((b, a) => a.compareTo(b));
+    if (sorted.length > 10) sorted = sorted.sublist(0, 10);
+
+    prefs.setStringList('highScores', sorted.map((e) => e.toString()).toList());
+  }
+
   void handleCardFlip(CardComponent card) async {
     if (!canFlip || flippedCards.contains(card) || !card.isFlipped) return;
 
@@ -143,6 +160,9 @@ class MedicineMatchGame extends FlameGame {
         //check end of game
         if (cards.every((card) => card.isMatched)) {
           await Future.delayed(const Duration(milliseconds: 500));
+          //add to high scores
+         gameProvider.addHighScore(gameProvider.score);
+          
           overlays.add("endgame");
           pauseEngine();
         }
@@ -159,7 +179,7 @@ class MedicineMatchGame extends FlameGame {
 
       flippedCards.clear();
 
-      // ✅ small lockout before next flip
+      // small lockout before next flip
       await Future.delayed(const Duration(milliseconds: 300));
       canFlip = true;
     }

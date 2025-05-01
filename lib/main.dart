@@ -72,8 +72,19 @@ class _MainAppState extends State<MainApp> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final provider = Provider.of<GameProvider>(context, listen: false);
+      provider.refreshHighScores();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    late GameProvider gameProvider = Provider.of<GameProvider>(context, listen: false);
+    late GameProvider gameProvider =
+        Provider.of<GameProvider>(context, listen: false);
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -97,6 +108,8 @@ class _MainAppState extends State<MainApp> {
                 game.paused = true;
                 game.overlays.add('pause');
               }
+              //refreh scores when going to score page
+
               currentIndex = index;
             });
           },
