@@ -28,4 +28,19 @@ class GameTextStyles {
     fontWeight: FontWeight.w600,
     fontFamily: 'MyFont',
   );
+
+  //documentation styles
+  static const TextStyle docTitle = TextStyle(
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'MyFont',
+  );
+
+  static const TextStyle docBody = TextStyle(
+    color: Colors.white,
+    fontSize: 16,
+    height: 1.4,
+    fontFamily: 'MyFont',
+  );
 }

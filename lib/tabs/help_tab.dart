@@ -116,11 +116,7 @@ class DocumentationTab extends StatelessWidget {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text(
-          'Documentation',
-          style: GameTextStyles.bar,
-        ),
-        //back arrow
+        title: const Text('Documentation', style: GameTextStyles.bar),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () => Navigator.pop(context),
@@ -130,15 +126,107 @@ class DocumentationTab extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width * 0.9,
           padding: const EdgeInsets.all(20),
-          child: const SingleChildScrollView(
-            //documentation
-            child: Text(
-              '''
-              Medicine Match!
-
-              Built with Flutter + Flame.
-              ''',
-              style: TextStyle(fontSize: 16, color: Colors.white),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text('Concept', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'Medicine Match a memory card game with a magical twist. The player has to match cards to catch the potion ingredients!',
+                  style: GameTextStyles.docBody,
+                ),
+                const SizedBox(height: 20),
+                const Text('Genre', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'Casual, Puzzle, Card Matching. App Store genres like Puzzle and Card.',
+                  style: GameTextStyles.docBody,
+                ),
+                const SizedBox(height: 20),
+                const Text('Platform', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'Mobile, Android & iOS.',
+                  style: GameTextStyles.docBody,
+                ),
+                const SizedBox(height: 20),
+                const Text('Story', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'An accident in the lab has caused all potion ingredients to come alive and run around. The player must catch them by matching cards correctly.',
+                  style: GameTextStyles.docBody,
+                ),
+                const SizedBox(height: 20),
+                const Text('Aesthetics', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'Cute, simple hand-drawn art that I drew myself. There is also groovy background music with sound effects for flipping cards, success, and error.',
+                  style: GameTextStyles.docBody,
+                ),
+                const SizedBox(height: 20),
+                const Text('Gameplay', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'Players are given a few seconds to memorize card positions before they flip over. Then, players flip cards two at a time to find matches. The game ends when all cards are matched.',
+                  style: GameTextStyles.docBody,
+                ),
+                const SizedBox(height: 20),
+                const Text('Controls', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'Simple tap to flip a card. Made for touch interaction.',
+                  style: GameTextStyles.docBody,
+                ),
+                const SizedBox(height: 20),
+                const Text('Screenshots', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/toadstool.png',
+                      width: 100,
+                      height: 100,
+                    ),
+                    const SizedBox(width: 16),
+                    Image.asset(
+                      'assets/images/sunflower.png',
+                      width: 100,
+                      height: 100,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                const Text('Problems', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'The sound is a bit buggy and sometimes plays with a lag. Also there is a problem with opening and closing the app.',
+                  style: GameTextStyles.docBody,
+                ),
+                const SizedBox(height: 20),
+                const Text('Resources', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'used info from these sites:\n'
+                  'https://flame-engine.org\n'
+                  'https://pub.dev\n'
+                  '\n'
+                  'used ChatGPT to help with coding:\n'
+                  'https://chatgpt.com\n'
+                  '\n'
+                  'background music:\n'
+                  'https://pixabay.com/music/funk-groovy-ambient-funk-201745',
+                  style: GameTextStyles.docBody,
+                ),
+                const SizedBox(height: 20),
+                const Text('About the Developer', style: GameTextStyles.docTitle),
+                const SizedBox(height: 8),
+                const Text(
+                  'Jackson Heim – Developer and designer. Created app with Flutter, Flame, Clip Studio Paint, and UI/UX design.',
+                  style: GameTextStyles.docBody,
+                ),
+              ],
             ),
           ),
         ),
