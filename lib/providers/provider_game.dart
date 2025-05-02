@@ -19,11 +19,28 @@ class GameProvider extends ChangeNotifier {
   double get sfxVolume => _sfxVolume;
   int get score => _score;
   int get lastScore => _lastScore;
-  List<int> get topHighScores => highScores; // Expose high scores
+  List<int> get topHighScores => highScores;
 
   //setter
   set game(FlameGame? value) {
     _theGame = value;
+  }
+
+  //audio players
+  AudioPlayer musicPlayer = AudioPlayer();
+  AudioPlayer sfxPlayer = AudioPlayer();
+  final audioContext =
+      AudioContextConfig(focus: AudioContextConfigFocus.mixWithOthers).build();
+  //play bgm
+  void playBgm(String url) async {
+    musicPlayer.setAudioContext(audioContext); // allow mixing sounds
+    musicPlayer.setReleaseMode(ReleaseMode.loop);
+    await musicPlayer.play(AssetSource(url));
+  }
+
+  //play sfx
+  void playSfx(String url) async {
+    await sfxPlayer.play(AssetSource(url));
   }
 
   //music
@@ -41,10 +58,10 @@ class GameProvider extends ChangeNotifier {
   set sfxVolume(double value) {
     _sfxVolume = value;
     sfxPlayer.setVolume(_sfxVolume);
-     //save setting
+    //save setting
     SharedPreferences.getInstance().then((prefs) {
-    prefs.setDouble('sfxVolume', _sfxVolume);
-  });
+      prefs.setDouble('sfxVolume', _sfxVolume);
+    });
     notifyListeners();
   }
 
@@ -59,24 +76,6 @@ class GameProvider extends ChangeNotifier {
     sfxPlayer.setVolume(_sfxVolume);
 
     notifyListeners();
-  }
-
-  //audio players
-  AudioPlayer musicPlayer = AudioPlayer();
-  AudioPlayer sfxPlayer = AudioPlayer();
-  final audioContext =
-      AudioContextConfig(focus: AudioContextConfigFocus.mixWithOthers).build();
-
-  //play bgm
-  void playBgm(String url) async {
-    musicPlayer.setAudioContext(audioContext); // allow mixing sounds
-    musicPlayer.setReleaseMode(ReleaseMode.loop);
-    await musicPlayer.play(AssetSource(url));
-  }
-
-  //play sfx
-  void playSfx(String url) async {
-    await sfxPlayer.play(AssetSource(url));
   }
 
   //score
