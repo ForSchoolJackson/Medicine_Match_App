@@ -23,6 +23,8 @@ class MedicineMatchGame extends FlameGame {
   final List<String> cardImages = [
     'toadstool.png',
     'sunflower.png',
+    'mintleaf.png',
+    'blueberry.png',
   ];
 
   bool canFlip = true;
